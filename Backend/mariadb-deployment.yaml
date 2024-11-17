@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  namespace: database
+  labels:
+    id: C0916667
+    app: wordpress_app
+    env: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:10.6.4-focal
+        ports:
+        - containerPort: 3306
+        envFrom:
+        - configMapRef:
+            name: database-config
+        - secretRef:
+            name: mariadb-secrets
